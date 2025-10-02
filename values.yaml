@@ -1,0 +1,36 @@
+replicaCount: 1
+
+# rclone image, duh
+image:
+  repository: rclone/rclone
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+# Ingress for public access (needed because the velero client will query it directly, from outside the cluster)
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: velero-encrypt.example.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: velero-encrypt.example.com
+      hosts:
+        - velero-encrypt.example.com
+
+app:
+  # Encryption key used by rclone
+  encryptionKey: "MY-SECURE-ENCRYPTION-KEY"
+  # Credentials to authenticate to rclone s3 server
+  in:
+    s3AccessKey: "user"
+    s3SecretKey: "S3-SECRET-KEY"
+  # Credentials to authenticate to destination s3 server
+  out:
+    bucket_and_prefix: "/server1/k8s"
+    s3AccessKey: "user"
+    s3SecretKey: "S3-SECRET-KEY"
