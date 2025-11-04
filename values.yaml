@@ -11,6 +11,7 @@ ingress:
   enabled: true
   className: nginx
   annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m"
     cert-manager.io/cluster-issuer: letsencrypt-prod
   hosts:
     - host: velero-encrypt.example.com
