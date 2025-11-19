@@ -1,6 +1,6 @@
 replicaCount: 1
 
-# rclone image, duh
+# rclone image
 image:
   repository: rclone/rclone
   pullPolicy: IfNotPresent
@@ -11,7 +11,7 @@ ingress:
   enabled: true
   className: nginx
   annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m" # avoid "413 Entity Too Large" errors
     cert-manager.io/cluster-issuer: letsencrypt-prod
   hosts:
     - host: velero-encrypt.example.com
