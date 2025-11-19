@@ -32,7 +32,7 @@ app:
   # Credentials to authenticate to destination s3 server
   out:
     provider: "Minio"
-    endpoint: "https://restic.itrooz.fr"
+    endpoint: "https://restic.example.com"
     region: "us-east-1"
     bucket_and_prefix: "/server1/k8s"
     s3AccessKey: "user"
