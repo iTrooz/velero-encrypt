@@ -36,7 +36,7 @@ spec:
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.images.rclone.repository }}:{{ .Values.images.rclone.tag }}"
           command:
             - "rclone"
             - "serve"

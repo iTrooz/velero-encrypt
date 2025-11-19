@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "encrypt.fullname" . }}-create-bucket
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: create-bucket
+        image: "{{ .Values.images.minioclient.repository }}:{{ .Values.images.minioclient.tag }}"
+        imagePullPolicy: {{ .Values.images.minioclient.pullPolicy }}
+
+        command: ["sh", "-c"]
+        args:
+          - |
+            set -e
+            # Create the bucket
+            mc mb crypt_out_s3/{{ .Values.app.in.bucket }} -p
+            # create a dummy object to make remote actually create the bucket
+            echo "keep" | mc pipe crypt_out_s3/fakebucket/.keep
+
+        # if config fails to load, mc will try to create a local folder. This will make it error out
+        workingDir: /readonly
+        volumeMounts:
+        - name: minio-client
+          mountPath: /root/.mc/config.json
+          subPath: config.json
+        - name: readonly
+          mountPath: /readonly
+          readOnly: true
+
+      volumes:
+      - name: minio-client
+        secret:
+          secretName: {{ include "encrypt.fullname" . }}-minio-client
+      - name: readonly
+        emptyDir: {}

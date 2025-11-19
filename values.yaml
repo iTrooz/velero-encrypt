@@ -1,10 +1,14 @@
 replicaCount: 1
 
-# rclone image
-image:
-  repository: rclone/rclone
-  pullPolicy: IfNotPresent
-  tag: "latest"
+images:
+  rclone:
+    repository: rclone/rclone
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  minioclient:
+    repository: minio/mc
+    pullPolicy: IfNotPresent
+    tag: "latest"
 
 # Ingress for public access (needed because the velero client will query it directly, from outside the cluster)
 ingress:
@@ -30,6 +34,8 @@ app:
   in:
     s3AccessKey: "user"
     s3SecretKey: "S3-SECRET-KEY"
+    # Will create this fake bucket in the encrypted S3
+    bucket: "fakebucket"
   # Credentials to authenticate to destination s3 server
   out:
     provider: "Minio"

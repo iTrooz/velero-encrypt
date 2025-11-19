@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "encrypt.fullname" . }}-minio-client
+stringData:
+  config.json: |
+    {
+      "version": "10",
+      "aliases": {
+        "crypt_out_s3": {
+          "url": "http://{{ include "encrypt.fullname" . }}",
+          "accessKey": "{{ .Values.app.in.s3AccessKey }}",
+          "secretKey": "{{ .Values.app.in.s3SecretKey }}",
+          "api": "s3v4",
+          "path": "auto"
+        }
+      }
+    }
