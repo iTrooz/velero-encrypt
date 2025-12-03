@@ -18,7 +18,7 @@ spec:
             # Create the bucket
             mc mb fake_s3/{{ .Values.app.in.bucket }} -p
             # create a dummy object to make remote actually create the bucket
-            echo "keep" | mc pipe fake_s3/fakebucket/.keep
+            echo "keep" | mc pipe fake_s3/{{ .Values.app.in.bucket }}/.keep
 
         # if config fails to load, mc will try to create a local folder. This will make it error out
         workingDir: /readonly
