@@ -41,7 +41,7 @@ spec:
             - "rclone"
             - "serve"
             - "s3"
-            - "crypt_out_s3:"
+            - "fake_s3:"
             - "--force-path-style=true"
             - "--addr=:8080"
             - "--auth-key"
