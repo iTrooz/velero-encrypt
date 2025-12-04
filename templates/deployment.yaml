@@ -47,7 +47,7 @@ spec:
             - "--auth-key"
             - "{{ .Values.app.in.s3AccessKey }},{{ .Values.app.in.s3SecretKey }}"
             - "--log-level=DEBUG"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.images.rclone.pullPolicy }}
           ports:
             - name: http
               containerPort: 8080
