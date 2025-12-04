@@ -39,15 +39,21 @@ spec:
           image: "{{ .Values.images.rclone.repository }}:{{ .Values.images.rclone.tag }}"
           imagePullPolicy: {{ .Values.images.rclone.pullPolicy }}
           command:
-            - "rclone"
-            - "serve"
-            - "s3"
-            - "fake_s3:"
-            - "--force-path-style=true"
-            - "--addr=:8080"
-            - "--auth-key"
-            - "{{ .Values.app.in.s3AccessKey }},{{ .Values.app.in.s3SecretKey }}"
-            - "--log-level=DEBUG"
+          command:
+            - "/bin/sh"
+            - "-c"
+            - "/usr/local/bin/rclone serve s3 fake_s3: --force-path-style=true --addr=:8080 --auth-key \"$REMOTE_ACCESS_KEY,$REMOTE_SECRET_KEY\" --log-level=DEBUG"
+          env:
+            - name: REMOTE_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "encrypt.fullname" . }}
+                  key: FAKE_REMOTE_ACCESS_KEY
+            - name: REMOTE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "encrypt.fullname" . }}
+                  key: FAKE_REMOTE_SECRET_KEY
           ports:
             - name: http
               containerPort: 8080
